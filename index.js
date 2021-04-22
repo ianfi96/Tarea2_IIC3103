@@ -1,4 +1,4 @@
-import 'dotenv/config.js'
+require('dotenv').config();
 import express, {json, urlencoded} from 'express';
 import mongoose from 'mongoose';
 import artistsRoutes from './routes/artists.js';
