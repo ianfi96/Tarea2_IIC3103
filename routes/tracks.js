@@ -1,46 +1,55 @@
 import express from 'express';
+import Track from '../models/track.js';
 
 const router = express.Router();
 
-const artists = [
-    {
-        "id": "blabalbalabla",
-        "nombre": "John",
-        "edad": 25,
-        "url": "hola"
+
+router.get('/', async (req, res) => {
+    try {
+        const allTracks = await Track.find().select('-_id -__v');
+        res.status(200).json(allTracks);
+    } catch (error) {
+        res.status(404).json({message: 'No hay canciones'});
     }
-]
-
-router.get('/', (req, res) => {
-    console.log(artists);
 });
 
-router.get('/:id', (req, res) => {
-    console.log(artists);
-});
-
-router.get('/:id/albums', (req, res) => {
-    console.log(artists);
-});
-
-router.get('/:id/tracks', (req, res) => {
-    console.log(artists);
+router.get('/:id', async (req, res) => {
+    try {
+        const track = await Track.findOne({ id: req.params.id}).select('-_id -__v');
+        return res.status(200).json(track);
+    } catch (error) {
+        return res.status(404).json({message: 'Canción no encontrado'});
+    }
 });
 
 
-
-router.post('/', (req,res) => {
-
+router.delete('/:id', async (req,res)=>{
+    try {
+        const toDeleteTrack = await Track.findOne({id: req.params.id});
+        if (toDeleteTrack){
+            const deleteTrack = await Track.deleteOne({id: req.params.id});
+            return res.status(204).json({message: "Canción eliminada"});
+        } else{
+            return res.status(404).json({message: "No existe cancion"});
+        }
+    } catch (error) {
+        return res.status(500);
+    }
 });
 
-router.post('/:id/albums', (req,res) => {
-
+router.put('/:id/play', async(req,res) =>{
+    try {
+        const toPlayTrack = await Track.findOne({id: req.params.id});
+        if (toPlayTrack) {
+            toPlayTrack.times_played += 1;
+            const updateTrack = await toPlayTrack.save();
+            return res.status(200).json({message: "canción reproducida"});
+        } else {
+            return res.status(404).json({message: "canción no encontrada"});
+        }
+    } catch (error) {
+        return res.status(500);
+    }
 });
-
-router.delete('/:id', (req,res)=>{
-
-});
-
-router.put('/:id/albums/play',)
 
 export default router;

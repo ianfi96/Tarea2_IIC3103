@@ -24,6 +24,10 @@ app.use('/artists', artistsRoutes);
 app.use('/albums', albumsRoutes);
 app.use('/tracks', tracksRoutes);
 
+// app.use((error, req, res, next) => {
+//     return res.status(500).json({ error: error.toString() });
+//   });
+
 app.get('/', (req, res)=>{
     console.log('TEST'),
     res.send('Hello from homepage');

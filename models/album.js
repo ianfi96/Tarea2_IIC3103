@@ -6,19 +6,27 @@ const albumSchema = new mongoose.Schema({
         required: true,
     },
     artist_id:{
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: 'Artist',
         required: true,
     },
-    nombre:{
+    name:{
         type: String,
         required: true,
     },
-    genero:{
+    genre:{
         type: String,
         required: true,
     },
-    url:{
+    self:{
+        type: String,
+        required: true,
+    },
+    tracks:{
+        type: String,
+        required: true,
+    },
+    artist:{
         type: String,
         required: true,
     }

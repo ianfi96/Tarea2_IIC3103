@@ -13,10 +13,21 @@ const artistSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    url:{
+    self:{
         type: String,
         required: true,
     },
+    albums:{
+        type: String,
+    },
+    tracks:{
+        type: String,
+    },
 });
 
+// artistSchema.methods.toJSON = () => {
+//     var obj = this.toObject();
+//     delete obj._id;
+//     delete obj.__v;
+// }
 export default mongoose.model('Artist', artistSchema);
