@@ -1,9 +1,11 @@
-require('dotenv').config();
+import dotenv from "dotenv"
 import express, {json, urlencoded} from 'express';
 import mongoose from 'mongoose';
 import artistsRoutes from './routes/artists.js';
 import albumsRoutes from './routes/albums.js';
 import tracksRoutes from './routes/tracks.js';
+
+dotenv.config();
 
 const app = express();
 // mongoose.connect(
