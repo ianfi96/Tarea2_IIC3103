@@ -6,8 +6,12 @@ import albumsRoutes from './routes/albums.js';
 import tracksRoutes from './routes/tracks.js';
 
 const app = express();
+// mongoose.connect(
+//     process.env.DATABASE_URI,
+//     { useNewUrlParser: true , useUnifiedTopology: true}
+// );
 mongoose.connect(
-    process.env.DATABASE_URI,
+    process.env.DATABASE_URI||'mongodb+srv://ianfi96:2014fischer@virginia-east.ykrvu.mongodb.net/tarea2_db?retryWrites=true&w=majority',
     { useNewUrlParser: true , useUnifiedTopology: true}
 );
 const db = mongoose.connection;
@@ -15,7 +19,6 @@ const db = mongoose.connection;
 db.on('error', (error) => {console.log(error)});
 db.once('open', ()=>{console.log('Connected to database correctly')});
 
-const PORT = 5000;
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -33,4 +36,8 @@ app.get('/', (req, res)=>{
     res.send('Hello from homepage');
 });
 
-app.listen(PORT,()=> console.log(`Server running on port http//localhost:${PORT}`))
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT,()=> console.log(`Server running on port http//localhost:${PORT}`));
+
+export default app;
