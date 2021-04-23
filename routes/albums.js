@@ -59,24 +59,20 @@ router.post('/:id/tracks', async (req,res) => {
         } else if (track_exists){
             return res.status(409).json(track_exists);
         } else {
-            const artist_exists = await Artist.findOne({id: album_exists.artist_id});
-            if (!artist_exists){
-                return res.status(422).json({message: 'No existe el Artista al que se quiere agregar la cancion'});
-            } else{
-                const track = await Track.create({
-                    id: new_track_id,
-                    album_id: req.params.id,
-                    name: new_track_name,
-                    duration: new_track_duration,
-                    times_played: 0,
-                    artist:`https://tarea2-ianfischer.herokuapp.com/artists/${artist_exists.id}`,
-                    album:`https://tarea2-ianfischer.herokuapp.com/albums/${req.params.id}`,
-                    self:`https://tarea2-ianfischer.herokuapp.com/tracks/${new_track_id}`,
-                });
-                const newTrack = await track.save();
-                const trackToShow = await Track.findOne({id:new_track_id}).select('-_id -__v')
-                return res.status(201).json(trackToShow);
-        }
+            const track = await Track.create({
+                id: new_track_id,
+                album_id: req.params.id,
+                name: new_track_name,
+                duration: new_track_duration,
+                times_played: 0,
+                artist:`https://tarea2-ianfischer.herokuapp.com/artists/${artist_exists.id}`,
+                album:`https://tarea2-ianfischer.herokuapp.com/albums/${req.params.id}`,
+                self:`https://tarea2-ianfischer.herokuapp.com/tracks/${new_track_id}`,
+            });
+            const newTrack = await track.save();
+            const trackToShow = await Track.findOne({id:new_track_id}).select('-_id -__v')
+            return res.status(201).json(trackToShow);
+        
     }
     } catch(error) {
         res.status(400).json({message:'input inválido'});

@@ -7,7 +7,11 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const allTracks = await Track.find().select('-_id -__v');
-        res.status(200).json(allTracks);
+        if (allTracks.length != 0) {
+            res.status(200).json(allTracks);
+        } else {
+            res.status(404).json({message: 'No hay canciones'});
+        }
     } catch (error) {
         res.status(404).json({message: 'No hay canciones'});
     }
@@ -16,7 +20,11 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const track = await Track.findOne({ id: req.params.id}).select('-_id -__v');
-        return res.status(200).json(track);
+        if (track) {
+            return res.status(200).json(track);
+        } else{
+            return res.status(404).json({message: 'Canción no encontrado'});
+        }
     } catch (error) {
         return res.status(404).json({message: 'Canción no encontrado'});
     }
