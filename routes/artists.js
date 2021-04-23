@@ -159,7 +159,7 @@ router.delete('/:id', async (req,res)=>{
             return res.status(404).json({message: "Artista no encontrado"});
         }
     } catch (error) {
-        return res.status(500).json({message: "Error request"});
+        return res.status(500).json({message: `${error}`});
     }
 });
 
