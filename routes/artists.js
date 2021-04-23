@@ -150,8 +150,8 @@ router.delete('/:id', async (req,res)=>{
                     if (tracksToDelete.length != 0) {
                         const deleteTracks = await Track.deleteMany({album_id: album.id});
                     };
+                    const deleteAlbum = await Album.deleteOne({id: album.id});
                 };
-                const deleteAlbum = await Album.deleteOne({id: album.id});
             };
             const deleteArtist = await Artist.deleteOne({id: req.params.id});
             return res.status(204).json({message: "Artista eliminado"});
