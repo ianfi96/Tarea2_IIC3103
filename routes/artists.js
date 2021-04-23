@@ -80,7 +80,7 @@ router.post('/', async (req,res) => {
     }
     try{
         const new_artist_id = Buffer.from(new_name).toString('base64').substring(0,22);
-        const artist_exists = await Artist.findOne({id: new_artist_id}).select('id').lean();
+        const artist_exists = await Artist.findOne({id: new_artist_id});
         const artist = await Artist.create({
             id: new_artist_id,
             name: new_name,
@@ -91,7 +91,8 @@ router.post('/', async (req,res) => {
         });
 
         if (artist_exists){
-                return res.status(409).json({message: 'Usuario ya existe'});
+
+                return res.status(409).json(artist_exists);
         } else {
             const newArtist = await artist.save();
             const artistToShow = await Artist.findOne({id: new_artist_id}).select('-_id -__v');
@@ -111,7 +112,7 @@ router.post('/:id/albums', async (req,res) => {
             return res.status(400).json({message: "input inválido"});
         }
         const new_album_id = Buffer.from(new_album_name+':'+ req.params.id).toString('base64').substring(0,22);
-        const album_exists = await Album.findOne({id: new_album_id}).select('id').lean();
+        const album_exists = await Album.findOne({id: new_album_id});
         const album = await Album.create({
             id: new_album_id,
             artist_id: req.params.id,
@@ -122,7 +123,7 @@ router.post('/:id/albums', async (req,res) => {
             artist:`https://tarea2-ianfischer.herokuapp.com/artists/${req.params.id}`,
         });
         if (album_exists) {
-            return res.status(409).json({message: 'álbum ya existe'});
+            return res.status(409).json(album_exists);
         } else {
             const artist_exists = await Artist.findOne({id: req.params.id}).select('id').lean();
             if (!artist_exists) {
