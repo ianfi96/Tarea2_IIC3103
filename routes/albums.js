@@ -2,7 +2,6 @@ import express from 'express';
 import Album from '../models/album.js';
 import Track from '../models/track.js';
 import Artist from '../models/artist.js';
-import track from '../models/track.js';
 
 const router = express.Router();
 
@@ -20,9 +19,13 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const album = await Album.findOne({ id: req.params.id}).select('-_id -__v');
-        return res.status(200).json(album);
+        if (album){
+            return res.status(200).json(album);
+        } else {
+            return res.status(404).json({message: 'Album no encontrado'});
+        }
     } catch (error) {
-        return res.status(404).json({message: 'Album no encontrado'});
+        return res.status(405).json({message: ''});
     }
 });
 
