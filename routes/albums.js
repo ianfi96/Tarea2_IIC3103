@@ -74,7 +74,7 @@ router.post('/:id/tracks', async (req,res) => {
                     self:`https://tarea2-ianfischer.herokuapp.com/tracks/${new_track_id}`,
                 });
                 const newTrack = await track.save();
-                const trackToShow = await Track.find({id:new_track_id}).select('-_id -__v')
+                const trackToShow = await Track.findOne({id:new_track_id}).select('-_id -__v')
                 return res.status(201).json(trackToShow);
         }
     }
