@@ -54,10 +54,10 @@ router.post('/:id/tracks', async (req,res) => {
         const new_track_id = Buffer.from(req.body.name + ':' + req.params.id).toString('base64').substring(0,22);
         const track_exists = await Track.findOne({id: new_track_id}).select('-_id -__v').lean();
         const album_exists = await Album.findOne({id: req.params.id}).select('artist_id').lean();
-        if (track_exists){
-            return res.status(409).json(track_exists);
-        } else if (!album_exists){
+        if (!album_exists){
             return res.status(422).json({message: 'No existe el album al que se quiere agregar la cancion'});
+        } else if (track_exists){
+            return res.status(409).json(track_exists);
         } else {
             const artist_exists = await Artist.findOne({id: album_exists.artist_id});
             if (!artist_exists){

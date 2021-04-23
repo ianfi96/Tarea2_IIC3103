@@ -111,12 +111,12 @@ router.post('/:id/albums', async (req,res) => {
         }
         const new_album_id = Buffer.from(new_album_name+':'+ req.params.id).toString('base64').substring(0,22);
         const album_exists = await Album.findOne({id: new_album_id}).select('-_id -__v');
-        if (album_exists) {
-            return res.status(409).json(album_exists);
+        const artist_exists = await Artist.findOne({id: req.params.id}).select('id').lean();
+        if (!artist_exists) {
+            return res.status(422).json({message: 'artista no existe'});
         } else {
-            const artist_exists = await Artist.findOne({id: req.params.id}).select('id').lean();
-            if (!artist_exists) {
-                return res.status(422).json({message: 'No existe el Artista al que se quiere agregar la cancion'});
+            if (album_exists) {
+                return res.status(422).json(album_exists);
             } else {
                 const album = await Album.create({
                     id: new_album_id,
