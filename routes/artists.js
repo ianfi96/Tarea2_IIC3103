@@ -75,6 +75,9 @@ router.get('/:id/tracks', async(req, res) => {
 router.post('/', async (req,res) => {
     const new_name = req.body.name;
     const new_age = req.body.age;
+    if (typeof new_name != 'string' || Number.isInteger(new_age)=== false) {
+        return res.status(400).json({message: "input inválido"});
+    }
     try{
         const new_artist_id = Buffer.from(new_name).toString('base64').substring(0,22);
         const artist_exists = await Artist.findOne({id: new_artist_id}).select('id').lean();
@@ -103,6 +106,9 @@ router.post('/', async (req,res) => {
 router.post('/:id/albums', async (req,res) => {
     const new_album_name = req.body.name;
     const new_album_genre = req.body.genre;
+    if (typeof new_album_name != 'string' || new_album_genre != 'string') {
+        return res.status(400).json({message: "input inválido"});
+    }
     try {
         const new_album_id = Buffer.from(new_album_name+':'+ req.params.id).toString('base64').substring(0,22);
         const album_exists = await Album.findOne({id: new_album_id}).select('id').lean();
