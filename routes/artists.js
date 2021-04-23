@@ -141,7 +141,7 @@ router.delete('/:id', async (req,res)=>{
             const albumsToDelete = await Album.find({artist_id: artistToDelete.id});
             if (albumsToDelete != 0) {
                 for (const album of albumsToDelete) {
-                    const tracksToDelete = Track.find({album_id: album.id});
+                    const tracksToDelete = await Track.find({album_id: album.id});
                     if (tracksToDelete != 0) {
                         const deleteTracks = await Track.deleteMany({album_id: album.id});
                     };
