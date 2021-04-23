@@ -106,10 +106,10 @@ router.post('/', async (req,res) => {
 router.post('/:id/albums', async (req,res) => {
     const new_album_name = req.body.name;
     const new_album_genre = req.body.genre;
-    if (typeof new_album_name != 'string' || new_album_genre != 'string') {
-        return res.status(400).json({message: "input inválido"});
-    }
     try {
+        if (typeof new_album_name != 'string' || new_album_genre != 'string') {
+            return res.status(400).json({message: "input inválido"});
+        }
         const new_album_id = Buffer.from(new_album_name+':'+ req.params.id).toString('base64').substring(0,22);
         const album_exists = await Album.findOne({id: new_album_id}).select('id').lean();
         const album = await Album.create({
