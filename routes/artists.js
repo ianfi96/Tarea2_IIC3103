@@ -80,7 +80,7 @@ router.post('/', async (req,res) => {
             return res.status(400).json({message: "input inválido"});
         }
         const new_artist_id = Buffer.from(new_name).toString('base64').substring(0,22);
-        const artist_exists = await Artist.findOne({id: new_artist_id});
+        const artist_exists = await Artist.findOne({id: new_artist_id}).select('-_id -__v');
         if (artist_exists){
                 return res.status(409).json(artist_exists);
         } else {
@@ -110,16 +110,7 @@ router.post('/:id/albums', async (req,res) => {
             return res.status(400).json({message: "input inválido"});
         }
         const new_album_id = Buffer.from(new_album_name+':'+ req.params.id).toString('base64').substring(0,22);
-        const album_exists = await Album.findOne({id: new_album_id});
-        const album = await Album.create({
-            id: new_album_id,
-            artist_id: req.params.id,
-            name: new_album_name,
-            genre: new_album_genre,
-            self:`https://tarea2-ianfischer.herokuapp.com/albums/${new_album_id}`,
-            tracks:`https://tarea2-ianfischer.herokuapp.com/albums/${new_album_id}/tracks`,
-            artist:`https://tarea2-ianfischer.herokuapp.com/artists/${req.params.id}`,
-        });
+        const album_exists = await Album.findOne({id: new_album_id}).select('-_id -__v');
         if (album_exists) {
             return res.status(409).json(album_exists);
         } else {
@@ -127,6 +118,15 @@ router.post('/:id/albums', async (req,res) => {
             if (!artist_exists) {
                 return res.status(422).json({message: 'No existe el Artista al que se quiere agregar la cancion'});
             } else {
+                const album = await Album.create({
+                    id: new_album_id,
+                    artist_id: req.params.id,
+                    name: new_album_name,
+                    genre: new_album_genre,
+                    self:`https://tarea2-ianfischer.herokuapp.com/albums/${new_album_id}`,
+                    tracks:`https://tarea2-ianfischer.herokuapp.com/albums/${new_album_id}/tracks`,
+                    artist:`https://tarea2-ianfischer.herokuapp.com/artists/${req.params.id}`,
+                });
                 const newAlbum = await album.save();
                 const albumToShow = await Album.findOne({id: new_album_id}).select('-_id -__v');
                 return res.status(201).json(albumToShow);
