@@ -147,7 +147,7 @@ router.delete('/:id', async (req,res)=>{
             if (albumsToDelete != 0) {
                 for (const album of albumsToDelete) {
                     const tracksToDelete = await Track.find({album_id: album.id});
-                    if (tracksToDelete != 0) {
+                    if (tracksToDelete.length != 0) {
                         const deleteTracks = await Track.deleteMany({album_id: album.id});
                     };
                 };
@@ -159,7 +159,7 @@ router.delete('/:id', async (req,res)=>{
             return res.status(404).json({message: "Artista no encontrado"});
         }
     } catch (error) {
-        return res.status(500).send();
+        return res.status(500).json({message: "Error request"});
     }
 });
 
