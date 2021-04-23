@@ -75,7 +75,7 @@ router.post('/:id/tracks', async (req,res) => {
         
     }
     } catch(error) {
-        res.status(400).json({message:'Otro error'});
+        res.status(400).json({message:`${error}`});
     }
 
 });
