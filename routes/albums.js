@@ -48,7 +48,7 @@ router.post('/:id/tracks', async (req,res) => {
     const new_track_name = req.body.name;
     const new_track_duration = req.body.duration;
     try{
-        if (typeof new_track_name != 'string' || typeof new_track_duration != 'number') {
+        if (typeof new_track_name != 'string' || typeof(new_track_duration) === 'number') {
             return res.status(400).json({message: "input inválido"});
         }
         const new_track_id = Buffer.from(req.body.name + ':' + req.params.id).toString('base64').substring(0,22);
@@ -75,7 +75,7 @@ router.post('/:id/tracks', async (req,res) => {
         
     }
     } catch(error) {
-        res.status(400).json({message:'input inválido'});
+        res.status(400).json({message:'Otro error'});
     }
 
 });
