@@ -47,10 +47,10 @@ router.get('/:id/tracks', async (req, res) => {
 router.post('/:id/tracks', async (req,res) => {
     const new_track_name = req.body.name;
     const new_track_duration = req.body.duration;
-    if (typeof new_track_name != 'string' || Number.isInteger(new_track_duration) === false) {
-        return res.status(400).json({message: "input inválido"});
-    }
     try{
+        if (typeof new_track_name != 'string' || typeof new_track_duration != 'number') {
+            return res.status(400).json({message: "input inválido"});
+        }
         const new_track_id = Buffer.from(req.body.name + ':' + req.params.id).toString('base64').substring(0,22);
         const track_exists = await Track.findOne({id: new_track_id}).select('-_id -__v').lean();
         const album_exists = await Album.findOne({id: req.params.id}).select('artist_id').lean();

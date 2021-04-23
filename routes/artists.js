@@ -116,7 +116,7 @@ router.post('/:id/albums', async (req,res) => {
             return res.status(422).json({message: 'artista no existe'});
         } else {
             if (album_exists) {
-                return res.status(422).json(album_exists);
+                return res.status(409).json(album_exists);
             } else {
                 const album = await Album.create({
                     id: new_album_id,
