@@ -75,25 +75,23 @@ router.get('/:id/tracks', async(req, res) => {
 router.post('/', async (req,res) => {
     const new_name = req.body.name;
     const new_age = req.body.age;
-    if (typeof new_name != 'string' || Number.isInteger(new_age)=== false) {
-        return res.status(400).json({message: "input inválido"});
-    }
     try{
+        if (typeof new_name != 'string' || Number.isInteger(new_age)=== false) {
+            return res.status(400).json({message: "input inválido"});
+        }
         const new_artist_id = Buffer.from(new_name).toString('base64').substring(0,22);
         const artist_exists = await Artist.findOne({id: new_artist_id});
-        const artist = await Artist.create({
-            id: new_artist_id,
-            name: new_name,
-            age: new_age,
-            self:`https://tarea2-ianfischer.herokuapp.com/artists/${new_artist_id}`,
-            albums:`https://tarea2-ianfischer.herokuapp.com/artists/${new_artist_id}/albums`,
-            tracks:`https://tarea2-ianfischer.herokuapp.com/artists/${new_artist_id}/tracks`,
-        });
-
         if (artist_exists){
-
                 return res.status(409).json(artist_exists);
         } else {
+            const artist = await Artist.create({
+                id: new_artist_id,
+                name: new_name,
+                age: new_age,
+                self:`https://tarea2-ianfischer.herokuapp.com/artists/${new_artist_id}`,
+                albums:`https://tarea2-ianfischer.herokuapp.com/artists/${new_artist_id}/albums`,
+                tracks:`https://tarea2-ianfischer.herokuapp.com/artists/${new_artist_id}/tracks`,
+            });
             const newArtist = await artist.save();
             const artistToShow = await Artist.findOne({id: new_artist_id}).select('-_id -__v');
             return res.status(201).json(artistToShow);
