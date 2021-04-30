@@ -29,9 +29,9 @@ app.use('/artists', artistsRoutes);
 app.use('/albums', albumsRoutes);
 app.use('/tracks', tracksRoutes);
 
-// app.use((error, req, res, next) => {
-//     return res.status(500).json({ error: error.toString() });
-//   });
+app.use((error, req, res, next) => {
+    return res.status(405).json({message: "Error, method not allowed" });
+  });
 
 app.get('/', (req, res)=>{
     console.log('TEST'),
