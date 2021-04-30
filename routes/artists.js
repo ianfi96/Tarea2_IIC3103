@@ -188,4 +188,6 @@ router.put('/:id/albums/play', async (req,res)=>{
     }
 });
 
+router.all((req, res, next) => res.status(405).send());
+
 export default router;
