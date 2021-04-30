@@ -25,9 +25,15 @@ db.once('open', ()=>{console.log('Connected to database correctly')});
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.use('/artists', artistsRoutes);
-app.use('/albums', albumsRoutes);
-app.use('/tracks', tracksRoutes);
+app.use('/artists', artistsRoutes.all((req,res)=>{
+    return res.status(405)
+}));
+app.use('/albums', albumsRoutes.all((req,res)=>{
+    return res.status(405)
+}));
+app.use('/tracks', tracksRoutes.all((req,res)=>{
+    return res.status(405)
+}));
 
 app.use((error, req, res, next) => {
     return res.status(405).json({message: "Error, method not allowed" });
